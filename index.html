@@ -91,10 +91,15 @@
             flex: 1;
         }
 
-        @media only screen and (max-width: 600px) { 
-            .container{
-                display:block;
+        #selectContainer{
+            padding: 40px 0 0 50px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                display: block;
             }
+
             #linechart {
                 width: 100vw;
             }
@@ -109,6 +114,13 @@
 
 <body>
     <h1>Pymetrics Clustering</h1>
+    <div id="selectContainer">
+        <select id="dataSelect" onchange="updateGraph();">
+            <option value="data/k-means-only.csv" selected>K-Means Only</option>
+            <option value="data/pca-k-means-3-groups.csv">PCA & K-Means (3 Groups)</option>
+            <option value="data/pca-k-means-4-groups.csv">PCA & K-Means (4 Groups)</option>
+        </select>
+    </div>
     <div class="container">
         <div id="linechart"></div>
         <div id="scatter"></div>
@@ -121,7 +133,15 @@
 
 <script>
     async function init() {
-        let data = await d3.csv('data/data.csv')
+        let data = await d3.csv('data/k-means-only.csv')
+        linechart(data)
+        scatter(data)
+    }
+
+    async function updateGraph() {
+        let domobj = document.getElementById('dataSelect');
+        var selection = domobj.options[domobj.selectedIndex].value;
+        let data = await d3.csv(selection)
         linechart(data)
         scatter(data)
     }
